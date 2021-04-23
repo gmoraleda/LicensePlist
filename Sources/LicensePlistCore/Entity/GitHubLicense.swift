@@ -1,33 +1,32 @@
-import LoggerAPI
 import APIKit
+import LoggerAPI
 
 public struct GitHubLicense: License, Equatable {
     public let library: GitHub
     public let body: String
     let githubResponse: LicenseResponse
 
-    public static func==(lhs: GitHubLicense, rhs: GitHubLicense) -> Bool {
+    public static func== (lhs: GitHubLicense, rhs: GitHubLicense) -> Bool {
         return lhs.library == rhs.library &&
             lhs.body == rhs.body
     }
 }
 
-extension GitHubLicense {
-
-    public enum DownloadError: Error {
+public extension GitHubLicense {
+    enum DownloadError: Error {
         case
-        unexpected(Error),
-        notFound(String)
+            unexpected(Error),
+            notFound(String)
     }
 
-    public static func download(_ library: GitHub) -> ResultOperation<GitHubLicense, DownloadError> {
+    static func download(_ library: GitHub) -> ResultOperation<GitHubLicense, DownloadError> {
         let owner = library.owner
         let name = library.name
         Log.info("license download start(owner: \(owner), name: \(name))")
         return ResultOperation<GitHubLicense, DownloadError> { _ in
             let result = Session.shared.lp.sendSync(RepoRequests.License(owner: owner, repo: name))
             switch result {
-            case .failure(let error):
+            case let .failure(error):
                 let statusCode = self.statusCode(from: error)
                 if statusCode != 404 {
                     assert(false, String(describing: error))
@@ -41,9 +40,9 @@ extension GitHubLicense {
                 Log.warning("404 error, license download failed(owner: \(owner), name: \(name)), so finding parent...")
                 let result = Session.shared.lp.sendSync(RepoRequests.Get(owner: owner, repo: name))
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     return Result.failure(DownloadError.unexpected(error))
-                case .success(let response):
+                case let .success(response):
                     if let parent = response.parent {
                         var library = library
                         library.owner = parent.owner.login
@@ -53,7 +52,7 @@ extension GitHubLicense {
                         return Result.failure(.notFound("\(name)'s original and parent's"))
                     }
                 }
-            case .success(let response):
+            case let .success(response):
                 let license = GitHubLicense(library: library,
                                             body: response.contentDecoded,
                                             githubResponse: response)
@@ -67,9 +66,9 @@ extension GitHubLicense {
             return nil
         }
         switch taskError {
-        case .responseError(let error):
+        case let .responseError(error):
             if let error = error as? ResponseError {
-                if case .unacceptableStatusCode(let code) = error {
+                if case let .unacceptableStatusCode(code) = error {
                     return code
                 }
             }

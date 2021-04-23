@@ -9,7 +9,6 @@ import Foundation
 
 /// An object that reads a xcodeproj file.
 struct XcodeProjectFileReader: FileReader {
-
     typealias ResultType = String?
 
     let path: URL
@@ -55,11 +54,11 @@ struct XcodeProjectFileReader: FileReader {
         case (true, true):
             guard
                 let xcodeprojPackageResolvedModifiedDate = try xcodeprojPackageResolvedPath
-                    .resourceValues(forKeys: [.attributeModificationDateKey])
-                    .attributeModificationDate,
+                .resourceValues(forKeys: [.attributeModificationDateKey])
+                .attributeModificationDate,
                 let xcworkspacePackageResolveModifiedDate = try xcworkspacePackageResolvedPath
-                    .resourceValues(forKeys: [.attributeModificationDateKey])
-                    .attributeModificationDate
+                .resourceValues(forKeys: [.attributeModificationDateKey])
+                .attributeModificationDate
             else {
                 return try SwiftPackageFileReader(path: defaultPath).read()
             }
@@ -80,5 +79,4 @@ struct XcodeProjectFileReader: FileReader {
             return try SwiftPackageFileReader(path: defaultPath).read()
         }
     }
-
 }

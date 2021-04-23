@@ -9,14 +9,12 @@ import Foundation
 
 /// An object that reads a Package.swift or Package.resolved file.
 struct SwiftPackageFileReader: FileReader {
-
     struct FileReaderError: Swift.Error {
         let path: URL
 
         var localizedDescription: String? {
             return "Invalide Package.swift name: \(path.lastPathComponent)"
         }
-
     }
 
     typealias ResultType = String?
@@ -24,7 +22,7 @@ struct SwiftPackageFileReader: FileReader {
     let path: URL
 
     func read() throws -> String? {
-        if path.lastPathComponent != Consts.packageName && path.lastPathComponent != "Package.resolved" {
+        if path.lastPathComponent != Consts.packageName, path.lastPathComponent != "Package.resolved" {
             throw FileReaderError(path: path)
         }
 
@@ -33,5 +31,4 @@ struct SwiftPackageFileReader: FileReader {
         }
         return path.lp.read()
     }
-
 }

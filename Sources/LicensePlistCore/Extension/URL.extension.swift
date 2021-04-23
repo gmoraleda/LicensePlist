@@ -17,17 +17,16 @@ extension LicensePlistExtension where Base == URL {
 }
 
 private let fm = FileManager.default
-extension LicensePlistExtension where Base == URL {
+public extension LicensePlistExtension where Base == URL {
+    var isExists: Bool { return fm.fileExists(atPath: base.path) }
 
-    public var isExists: Bool { return fm.fileExists(atPath: base.path) }
-
-    public var isDirectory: Bool {
+    var isDirectory: Bool {
         var result: ObjCBool = false
         fm.fileExists(atPath: base.path, isDirectory: &result)
         return result.boolValue
     }
 
-    public func read() -> String? {
+    func read() -> String? {
         if !isExists {
             Log.warning("Not found: \(base).")
             return nil
@@ -37,13 +36,13 @@ extension LicensePlistExtension where Base == URL {
         }
     }
 
-    public func write(content: String) {
+    func write(content: String) {
         return run {
             try content.write(to: base, atomically: false, encoding: Consts.encoding)
         }
     }
 
-    public func deleteIfExits() -> Bool {
+    func deleteIfExits() -> Bool {
         if !isExists {
             return false
         }
@@ -53,7 +52,7 @@ extension LicensePlistExtension where Base == URL {
         }
     }
 
-    public func createDirectory(withIntermediateDirectories: Bool = true) {
+    func createDirectory(withIntermediateDirectories: Bool = true) {
         return run {
             try fm.createDirectory(at: base,
                                    withIntermediateDirectories: withIntermediateDirectories,
@@ -61,7 +60,7 @@ extension LicensePlistExtension where Base == URL {
         }
     }
 
-    public func listDir() -> [URL] {
+    func listDir() -> [URL] {
         return getResultOrDefault {
             try fm.contentsOfDirectory(at: base, includingPropertiesForKeys: nil, options: [])
         }
@@ -75,6 +74,7 @@ extension LicensePlistExtension where Base == URL {
             return T.default
         }
     }
+
     private func run(closure: () throws -> Void) {
         do {
             try closure()
@@ -82,11 +82,13 @@ extension LicensePlistExtension where Base == URL {
             handle(error: e)
         }
     }
+
     private func handle(error: Error) {
         let message = String(describing: error)
         assertionFailure(message)
         Log.error(message)
     }
+
     internal var fileURL: URL {
         return URL(fileURLWithPath: base.absoluteString)
     }

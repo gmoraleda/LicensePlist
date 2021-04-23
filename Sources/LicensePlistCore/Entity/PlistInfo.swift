@@ -58,8 +58,8 @@ struct PlistInfo {
 
     mutating func compareWithLatestSummary() {
         guard let cocoaPodsLicenses = cocoaPodsLicenses,
-            let githubLibraries = githubLibraries,
-            let manualLicenses = manualLicenses else { preconditionFailure() }
+              let githubLibraries = githubLibraries,
+              let manualLicenses = manualLicenses else { preconditionFailure() }
 
         let config = options.config
 
@@ -96,8 +96,8 @@ struct PlistInfo {
 
     mutating func collectLicenseInfos() {
         guard let cocoaPodsLicenses = cocoaPodsLicenses,
-            let githubLicenses = githubLicenses,
-            let manualLicenses = manualLicenses else { preconditionFailure() }
+              let githubLicenses = githubLicenses,
+              let manualLicenses = manualLicenses else { preconditionFailure() }
 
         licenses = ((cocoaPodsLicenses as [LicenseInfo]) + (githubLicenses as [LicenseInfo]) + (manualLicenses as [LicenseInfo]))
             .reduce([String: LicenseInfo]()) { sum, e in

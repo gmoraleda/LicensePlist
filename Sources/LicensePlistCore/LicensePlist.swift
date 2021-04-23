@@ -2,7 +2,6 @@ import Foundation
 import LoggerAPI
 
 public final class LicensePlist {
-
     public init() {}
 
     public func process(options: Options) {
@@ -58,7 +57,7 @@ private func readPodsAcknowledgements(path: URL) -> [String] {
 
     let pathsToFind = [
         path.appendingPathComponent("Target Support Files"),
-        path.appendingPathComponent("_Prebuild").appendingPathComponent("Target Support Files")
+        path.appendingPathComponent("_Prebuild").appendingPathComponent("Target Support Files"),
     ]
 
     let paths = pathsToFind.filter { $0.lp.isExists }

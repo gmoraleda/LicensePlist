@@ -5,12 +5,11 @@
 //  Created by yosshi4486 on 2021/04/06.
 //
 
-import XCTest
 @testable import LicensePlistCore
+import XCTest
 
 @available(OSX 10.11, *)
 class XcodeProjectFileReaderTests: XCTestCase {
-
     var projectFileURL: URL!
     var wildcardFileURL: URL!
 
@@ -87,5 +86,4 @@ class XcodeProjectFileReaderTests: XCTestCase {
 
         XCTAssertNotEqual(projectPackageResolvedFileModificationDate, cocoapodPackageResolvedFileModificationDate)
     }
-
 }

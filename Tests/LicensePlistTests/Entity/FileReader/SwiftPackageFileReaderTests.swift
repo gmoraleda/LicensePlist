@@ -5,11 +5,10 @@
 //  Created by yosshi4486 on 2021/04/06.
 //
 
-import XCTest
 @testable import LicensePlistCore
+import XCTest
 
 class SwiftPackageFileReaderTests: XCTestCase {
-
     var fileURL: URL!
 
     var packageResolvedText: String {
@@ -129,5 +128,4 @@ class SwiftPackageFileReaderTests: XCTestCase {
             packageResolvedText.trimmingCharacters(in: .whitespacesAndNewlines)
         )
     }
-
 }
